@@ -1,0 +1,54 @@
+----------------------------------
+res = MoviesWS.post("http://localhost:3000/movies.json", :body => {:movie => {:id => "123457", :title => "rocky27", :foo => "bar"}}.to_json, :headers => {"Content_Type" => "application/json"}) 
+
+-----------------------------------
+
+MoviesWS.get("http://localhost:3000/movies/12345.json").parsed_response
+
+
+----------------------------------------------------------
+
+MoviesWS.get("http://localhost:3000/movies/12345.json").response.code
+
+
+---------------------------------------
+
+resp = MoviesWS.put("http://localhost:3000/movies/123457.json", :body=> {:movie=>{:title=>"rocky2700",:foo => "bar"}}.to_json, :headers => {"Content_Type" => "application/json"})
+
+----------------------------------------------
+PATCH is for partial update, helps when payload is huge :) 
+
+---------------------------------------------
+resp = MoviesWS.patch("http://localhost:3000/movies/123457.json", :body=> {:movie=>{:title=>"rocky2700",:foo => "bar"}}.to_json, :headers => {"Content_Type" => "application/json"})
+
+-----------------------------------------------------
+
+HTTP METHOD HEAD is a get without response body.
+It is used only to get meta information 
+helps when we wanna know the state of the object by comparing Etag 
+
+resp.header["etag"]
+
+-----------------------------------------------------
+resp = MoviesWS.delete("http://localhost:3000/movies/123457.json")
+
+---------------------render action: :some_action----------------------------
+
+class HelloController < ApplicationController
+  def sayhello
+    @msg="hello world"
+  end
+
+  #/hello/say/:something
+  def say
+    case params[:something]
+    when "hello" then @msg="saying hello"; render action: :sayhello
+    when "goodbye" then @msg="saying goodbye"; render action: :saygoodbye
+    when "badword" then render nothing: true
+    else 
+      render plain: "what do you want me to say?"
+    end
+  end
+end
+
+------------------------------------

@@ -1,0 +1,78 @@
+-------===IMPORTING DB ====------
+mongoimport --db test --collection zips --drop --file zips.json
+
+------===== CAPPED COLLECTION ===---------- [fixed sized, overwrite it collection is filled] ------
+
+db.createCollection("log", { capped : true,size : 5242880, max : 5000 } )
+--------==== MONGO SHELL ==------
+mongo
+use test
+db.zips.findOne()
+------== IRB ==----------
+require 'mongo'
+Mongo::Logger.logger.level = ::Logger::INFO
+db = Mongo::Client('mongodb://localhost:27017')
+db= db.use('test')
+db.database.name
+db.database.collection_names
+db[:zips].find.first
+-----==== MONGO-RUBY DRIVER ----===
+gem update ---system
+gem isntall mongo
+gem install bson_ext
+require mongo
+-------------------------| MONGO CRUD COMMANDS |-----------------------------------------------
+insert_one (:_id => "100" , :city = "LAHORE")
+insert_many([{},{},{},{},{}])
+find(:_id => "100" , :city = "LAHORE")
+find().distinct(:columm)
+find().each { |r| puts r }
+.find({:state =>"MD"}).projection(state:true,_id:false).first
+.find({:state =>"MD"}).projection(state:1, _id:0).first
+.skip(int)
+.limit(int)
+.sort({:city => 1}) // 1 for ascending
+.sort({:city => -1}) // -1 for Descending
+
+------------------------ | Mongo Read/Find() controls | ---------------------
+.find(:city => {:$lt => 'P',:$gt => 'B'}).limit(3).to_a.each{ |r| pp r}
+.find(:city => {:$regex =>'X'})  			//city names containg 'X'
+.find(:city => {:$regex =>'X$'}) 			// cities Ending with X
+.find(:city => {:$regex =>'^X'}) 			// city name sstarting with 'X'
+.find(:city => {:$regex => '^[A-E]'}) 			//cities matching regex [A to E]
+.find(:city => {:$exists =>true}) 			// will check to see if document exists
+.find(:pop =>{'$not' => {'$gt' => 9500}}) 		// performs logical NOT Operation
+.find({:state=> {:$type =>2}}).first 		// selects the documents where the value of the field is an instance of the specified numeric BSON type
+							//Handy when dealing with unstructured data where datatypes are not predictable
+
+--------------------------|Mongo MORE CRUD |-------------------------
+.find(:_id =>"100").replace_one(:_id => "100", :city =>"city02", :loc => [ -78.22, 36.22 ], :pop =>2000, :state => "MD" )
+.find(:_id => "100").update_one(:$set => {:city => "name2"})
+.find(:state =>'MD').update_many(:$set => {:state =>'XX'})
+.find(:city =>'name2').delete_one()
+.find(:city =>'name2').delete_many()
+.find(:city =>"ODENVILLE1").update_one({:$set => {:city =>"ODENVILLE2"}}, :upsert => true)	//will insert if no document is found
+-------------------------| Gettign started with the new app -----------------------------------
+
+Mongoid Database Connection: rails g mongoid:config
+
+[ to kill a process use 
+> kill -9 [PID-here] 
+use following command to see which process are using 3000 port
+> lsof -wni tcp:3000 
+ ]
+
+---------------------------------------------------------
+Loading app database with external file
+
+rails c
+file_path="./race_results.json"
+file=File.read(file_path); nil
+hash=JSON.parse(file); nil
+racers=Racer.collection
+racers.insert_many(hash); nil
+
+
+-------------------------------------------------
+
+
