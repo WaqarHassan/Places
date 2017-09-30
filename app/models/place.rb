@@ -68,8 +68,13 @@ class Place
   	  {:$project => {:_id => 1}}
   	  ]).to_a.map{|a| a[:_id].to_s}
   end
+  
+  def self.create_indexes
 
-
+  end
+  def self.remove_index
+  	
+  end
 
 
 end
