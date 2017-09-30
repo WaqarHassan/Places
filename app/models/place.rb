@@ -70,10 +70,22 @@ class Place
   end
   
   def self.create_indexes
+  	collection.indexes.create_one({"geometry.geolocation"=>Mongo::Index::GEO2DSPHERE})	
+  end
+  def self.remove_indexes
+  	collection.indexes.drop_all#({"geometry.geolocation"})
+  end
+  def self.near pa_point	 , max_meters = 0
+  	collection.find(:'geometry.geolocation' => {
+  		:$near => { 
+  			:$geometry=> pa_point.to_hash, :$maxDistance => max_meters}})
+  	# collection.find({:'geometry.geolocation' => {:$near => {:$geometry => input.to_hash, :$maxDistance => max_meters}}})
 
   end
-  def self.remove_index
-  	
+  def near max_meters = nil	
+  	result = Place.near @location.to_hash , max_meters
+  	Place.to_places(result)
+
   end
 
 
