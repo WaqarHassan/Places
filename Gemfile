@@ -50,3 +50,4 @@ end
 
 gem 'mongo', '~> 2.1.0'
 gem 'mongoid', '~> 5.0.0'
+gem 'exifr'
