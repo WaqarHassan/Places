@@ -13,4 +13,14 @@ class Photo
 		end
 
 	end
+	def persisted?
+		@id.nil?
+	end
+	def save
+		if persisted?
+			Rails.logger.debug {"Inside persisted"}
+			
+		end
+	end
+
 end
