@@ -1,0 +1,91 @@
+GridFS demo 1
+
+
+require './gridfs_loader'
+
+GridfsLoader.mongo_client
+
+os_file = File.open("./image1.jpg")
+
+grid_file = Mongo::Grid::File.new(od_file.read)
+
+grid_file.methods
+
+grid_file.id
+
+grid_file.content_type
+
+grid_file.filename
+
+grid_file.upload_date
+
+grid_file.info
+
+
+grid_file.chunks.count
+
+c= GridfsLoader.mongo_client
+
+f = c.database.fs.insert_one(grid_file)
+
+=============================================================================================================								Gridfs DEmo 2
+
+stored_file = c.database.fs.find_one(:_id => 	'3432478943462472436427000000'))
+
+os_file = File.open("./exported_copy.jpg",'w')
+
+stored_file.chunks.reduce([]) { |x,chunk| os_file2 << chunl.data.data}
+
+description = {}
+
+description[:filename] = "myfile.jpg"
+
+description[:content_type] = "image/jpeg"
+
+description[:metadata] = {:author => "kiran", :topic => "nice spot"}
+}
+	
+grid_file = Mongo::Grid::File.new(os_file.read, description)
+
+grid_file.info
+
+r = c.database.fs.insert_one(grid_file)
+
+c.database.fs.find_one(:conentType => "image/jpeg" , :filename => "myFile.jpg")
+
+c.database.fs.find_one(:"metadata.author" => "kiran" , :"metadata.topic" => {:$regex => "spot"})
+
+c.database.fs.find(:contentType => 'image/jpeg', :filename => "myfile.jpg").first
+
+id = c.database.fs.find(:"metadata.author" => "kiran").first[:_id]
+
+r = c.database.fs.find(:_id => id).delete_one
+
+r.deleted_count
+
+r = c.database.fs.find.delete_many
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
